@@ -22,7 +22,4 @@ Here I'm tracking the process I'm following and the decisions I'm taking. I did 
      - To make it work after the article, I had to: 
        - upgrade php-vercel version to 0.7.0
        - set the build folder on Vercel to `api`
-3. At first, I used Vercel default auto deploy functionality, but I also want to show something more about my habits and skills here; that's why I replaced it with a manual GitHub Action configured to build the app, static analysis, tests, and release on Vercel. Staging release is triggered at every push on master, while Prod release happens after a tag.
-   - Pipeline will download and install the app, run static analysis via `phpstan` and run tests; only if all is fine, will trigger deploy
-   - Push on master deploy staging
-   - Tag on master deploy prod
+3. I used Vercel default auto deploy functionality, but I also want to show something more about my habits and skills here; that's why I created a GitHub Action configured to build the app, static analysis, and tests; in a real-world project, I would have invested time in understanding how to trigger the release on Vercel from here (or on another platform, since PHP on Vercel manually has some manual config to do). In that case, I typically like to have a staging release triggered at every push on master, while Prod release happens after a tag.
