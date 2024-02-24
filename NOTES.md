@@ -106,6 +106,11 @@ This is just to simplify the exercise.
    - position must be free [v]
    - player cannot make 2 moves in a row (player X will start by default)
 
+## Step 4b: Refactoring
+
+I spend time in setting up the walking skeleton and to commit decently in the first steps to show the approach, therefore at some point I decided to be more pragmatic in the implementation.
+Thanks to tests, I refactored a bit after that, before building the tests examples - but of course there might probably be something more to clean up or refactor for an ideal code design (if there can be an ideal one).
+
 ## Step 5: Allow to play somehow
 
 Requirement: Please provide a test case example (such as test cases or a list of cURL commands) of a fully played out game with your solution.
@@ -125,4 +130,4 @@ Requirement: Please provide a test case example (such as test cases or a list of
 - I treated Repository only as container for data persistance logic - all the decisions about the game are takes from the service
 - Some casting is handled manually to avoid DB connection to trigger from Laravel and still be able to write a unit test
 - At some point I decided to take some more simplifications to keep the exercise time-boxed to 4-6 hours
-- 
+- I didn't care about performance at all - usually performance are a problem to solve only when it really happens, in this case it didn't even when finished
