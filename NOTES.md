@@ -111,3 +111,14 @@ Requirement: Please provide a test case example (such as test cases or a list of
 2. cURL requests with instructions to play in production or locally
 
 3. CLI command for interactive game
+
+## Final notes
+
+- I usually also use custom Response objects that can easily implements Arrayable to expose how the JSON needs to be done and encapsulate the responses, same as for Requests encapsulating params and validation.
+- Again, I want to emphasize that I would never keep using primitives and native arrays, I would create value objects/ data class to handle data structures
+- I usually also add comments in Models to be able to use attributes around withouth PHP storm warning me that they don't exists
+- Ideally I should test all the possible winning options, I will only test one for each situation (rows, columns and diagonals) as a proof
+- I treated Repository only as container for data persistance logic - all the decisions about the game are takes from the service
+- Some casting is handled manually to avoid DB connection to trigger from Laravel and still be able to write a unit test
+- At some point I decided to take some more simplifications to keep the exercise time-boxed to 4-6 hours
+- 

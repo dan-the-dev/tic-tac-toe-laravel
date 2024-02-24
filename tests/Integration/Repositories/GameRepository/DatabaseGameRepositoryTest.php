@@ -30,4 +30,47 @@ class DatabaseGameRepositoryTest extends TestCase
         $this->assertNotNull($first);
         $this->assertEquals($first->id, $actual);
     }
+
+    public function testItMakeMovesCorrectly():  void
+    {
+        $game = new Game();
+        $game->status = Game::BOARD_START;
+        $game->saveOrFail();
+
+        $actual1 = $this->repository->move($game->id, 'X', 1);
+
+        $this->assertEquals([0, 'X', 2, 3, 4, 5, 6, 7, 8], $actual1->status);
+
+        $actual2 = $this->repository->move($game->id, 'Y', 2);
+
+        $this->assertEquals([0, 'X', 'Y', 3, 4, 5, 6, 7, 8], $actual2->status);
+
+        $actual3 = $this->repository->move($game->id, 'X', 7);
+
+        $this->assertEquals([0, 'X', 'Y', 3, 4, 5, 6, 'X', 8], $actual3->status);
+    }
+
+    public function testItSetsWinnerCorrectly():  void
+    {
+        $game = new Game();
+        $game->status = Game::BOARD_START;
+        $game->saveOrFail();
+
+        $actual = $this->repository->setWinner($game->id, 'X');
+
+        $this->assertEquals('X', $actual->winner);
+        $this->assertNotNull($actual->finished_at);
+    }
+
+    public function testItSetsFinishedAtCorrectly():  void
+    {
+        $game = new Game();
+        $game->status = Game::BOARD_START;
+        $game->saveOrFail();
+
+        $actual = $this->repository->setFinished($game->id);
+
+        $this->assertNull($actual->winner);
+        $this->assertNotNull($actual->finished_at);
+    }
 }
