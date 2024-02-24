@@ -31,41 +31,43 @@ class DefaultMakeAMoveCommandHandler implements MakeAMoveCommandHandler
             return $this->createMoveResult($updatedGame);
         }
 
-        $winner = $this->calculateWinner($updatedGame);
-        $someoneWon = !is_null($winner);
+        $setWinner = $this->calculateSetWinner($updatedGame);
+        $someoneWon = !is_null($setWinner);
         if ($someoneWon) {
+            $winner = $updatedGame->status[$setWinner[0]];
             $updatedGame = $this->gameRepository->setWinner(gameId: $updatedGame->id, player: $winner);
-            return $this->createMoveResult($updatedGame);
+            return $this->createMoveResult($updatedGame, $setWinner);
         }
 
         return $this->createMoveResult($updatedGame);
     }
 
-    private function createMoveResult(Game $updatedGame): MakeAMoveResult
+    private function createMoveResult(Game $updatedGame, array $setWinner = null): MakeAMoveResult
     {
         return new MakeAMoveResult(
             status: $updatedGame->status,
             winner: $updatedGame->winner,
-            finished: !is_null($updatedGame->finished_at)
+            finished: !is_null($updatedGame->finished_at),
+            setWinner: $setWinner
         );
     }
 
-    private function calculateWinner(Game $updatedGame): null|string
+    private function calculateSetWinner(Game $updatedGame): null|array
     {
         $winningSets = [Game::ROWS, Game::COLUMNS, Game::DIAGONALS];
-        $winner = null;
+        $setWinner = null;
         foreach ($winningSets as $winningSet) {
             foreach ($winningSet as $set) {
                 if (
                     is_string($updatedGame->status[$set[0]]) &&
                     $updatedGame->status[$set[0]] === $updatedGame->status[$set[1]] && $updatedGame->status[$set[0]] === $updatedGame->status[$set[2]]
                 ) {
-                    $winner = $updatedGame->status[$set[0]];
+                    $setWinner = $set;
                     break;
                 }
             }
         }
-        return $winner;
+        return $setWinner;
     }
 
     private function validateMove(Game $currentGame, MakeAMoveCommand $command): void

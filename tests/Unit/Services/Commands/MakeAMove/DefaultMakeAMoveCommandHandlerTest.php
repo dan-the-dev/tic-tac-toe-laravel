@@ -84,7 +84,8 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
         $this->assertEquals(new MakeAMoveResult(
             status: ['X', 1, 'Y', 'Y', 'Y', 5, 'X', 'X', 'X'],
             winner: 'X',
-            finished: true
+            finished: true,
+            setWinner: [6, 7, 8]
         ), $actual);
     }
     public function testItSetAsFinishedWhenYWinsInDiagonal(): void
@@ -111,7 +112,8 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
         $this->assertEquals(new MakeAMoveResult(
             status: ['X', 1, 'Y', 3, 'Y', 'X', 'Y', 'X', 8],
             winner: 'Y',
-            finished: true
+            finished: true,
+            setWinner: [2, 4, 6]
         ), $actual);
     }
     public function testItSetAsFinishedWhenXWinsInColumn(): void
@@ -138,7 +140,8 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
         $this->assertEquals(new MakeAMoveResult(
             status: ['Y', 'X', 'Y', 3, 'X', 'X', 'Y', 'X', 8],
             winner: 'X',
-            finished: true
+            finished: true,
+            setWinner: [1, 4, 7]
         ), $actual);
     }
     public function testItThrowsExceptionIfPositionNotFree(): void

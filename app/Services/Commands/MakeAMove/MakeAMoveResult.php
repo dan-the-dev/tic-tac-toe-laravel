@@ -10,7 +10,8 @@ readonly class MakeAMoveResult
          */
         public array $status,
         public ?string $winner = null,
-        public bool $finished = false
+        public bool $finished = false,
+        public ?array $setWinner = null
     )
     {
     }
