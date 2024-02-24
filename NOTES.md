@@ -33,4 +33,8 @@ Approach: I will work in TDD outside-in, so I will build this from the outside (
 
 1. Create an invokable NewGameController.
    - Controller has no Request object because it has no input params.
-   - 
+   - I put the services in the `services` folder following Laravel default infra, I typically prefer to modularize by domain elements (NewGame could have been a module here) and then under each module have the infra components, ideally following Clean Arch - it wasn't worth for the exercise)
+   - I organized Services in Commands following CQS/CQRS, which I usually do when complexity is enough - I did it here to showcase this. We will probably have only Commands in this exercise, btw.
+   - I made a refactor of the controller immediately because strict TDD with triangulation etc would have costed a lot just to force a simple value on a simple behavior. The controller just have to validate request, send request to service, and handle response imho - and in this case we don't have a request and response is very small, so it wasn't worth it.
+   - Since the Response here is very easy, I didn't create an adapter class for the response creation, but I created a dedicated method to isolate the responsibility anyway.
+   - Important notes about tests: I typically favor manual Fakes and Spies over mocking library because this makes tests not coupled with the implementation (calling a specific method of a collaborator is an implementation detail) and therefore easier to maintain and doesn't change if I change the way those two classes communicate (the fake will change, but the fake is not specific of a single test - see [here](https://antodippo.com/how-can-i-trust-my-testsuite/#/25) for a reference).
