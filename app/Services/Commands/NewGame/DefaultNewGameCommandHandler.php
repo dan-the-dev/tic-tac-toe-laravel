@@ -3,15 +3,20 @@
 namespace App\Services\Commands\NewGame;
 
 use App\Models\Game;
+use App\Repositories\GameRepository\GameRepository;
 
 class DefaultNewGameCommandHandler implements NewGameCommandHandler
 {
+    public function __construct(
+        private GameRepository $gameRepository
+    )
+    {
+    }
 
     public function handle(): NewGameResult
     {
-        $game = new Game();
-        $game->saveOrFail();
+        $gameId = $this->gameRepository->create();
 
-        return new NewGameResult($game->id);
+        return new NewGameResult($gameId);
     }
 }
