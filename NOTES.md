@@ -14,9 +14,9 @@ DB hostname: `https://tic-tac-toe-laravel.vercel.app/` - just replace the hostna
 
 - Start a game: `curl -XPOST -H "Content-type: application/json" 'http://localhost/api/new-game'`
 - Make a move: `curl -XPOST -H "Content-type: application/json" -d '{
-  "gameId": 7,
-  "player": "Y",
-  "position": 1
+  "gameId": 1,
+  "player": "X",
+  "position": 0
   }' 'http://localhost/api/move'`
 
 # Exercise Notes
@@ -128,11 +128,11 @@ Thanks to tests, I refactored a bit after that, before building the tests exampl
 
 Requirement: Please provide a test case example (such as test cases or a list of cURL commands) of a fully played out game with your solution.
 
-1. Feature test simulating a game via HTTP Requests
+1. Feature test simulating a game via HTTP Requests -> Feature/GameSimulationTest.php, run `./vendor/bin/sail artisan test --filter GameSimulationTest` 
 
-2. cURL requests with instructions to play in production or locally
+2. cURL requests with instructions to play in production or locally -> see beginning of this file for the commands to start a new game and make a move
 
-3. CLI command for interactive game
+3. CLI command for interactive game -> run `./vendor/bin/sail artisan tictactoe`
 
 ## Final notes
 
