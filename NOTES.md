@@ -57,3 +57,57 @@ Note: I will use this first step as showcase for some of the practices and metho
    - Usually, I would follow Object Calisthenics rules and avoid sharing primitives variables, for example ID shouldn't be an int but a Data Class - here I decided to favor simplicity and stick with the int
    - I used Parallel change here: I first created GameRepository and its Database implementation to encapsulate the DB writing logic (see git log for evidence) and then I replaced it in the service - this way the refactoring never broke the existing code
    - As visible in GIT logs, after introducing the repository, I can also easily test in the service that if something break up with the repo, we throw a custom exception - I like custom exception because they are easily readable
+
+3. Finally, following Trunk-Based Development coding pattern of [Keystone Interface](https://martinfowler.com/bliki/KeystoneInterface.html), I add the route to access the API as last piece - this would have allowed me to continuously release my progress hiding it to the user. It's the easier pattern to allow TBD and CI/CD.
+
+At this point, I already setup some architecture and will stick to this, so following notes wll probably be smaller and strictly related to the assignment to finish the exercise.
+
+## Step 3: Create the API to make a move
+
+Requirement: Need an endpoint to call to play a move in the game. The endpoint should take as inputs the Game ID (from the first endpoint), a player number (either 1 or 2), and the position of the move being played. 
+    The response should include a data structure with the representation of the full board so that the UI can update itself with the latest data on the server. 
+    The response should also include a flag indicating whether someone has won the game or not and who that winner is if so.
+
+1. To start accepting moves, we need to represent the board. I will make this representation as easy as possible: an array from 0 to 8 will represent each coordinate of the board. 
+    For a bigger/more complex board, a matrix of coordinates might be fit best, but here we can do things more easily. I will store the array in a column `status` of the `game` table.
+    This is the same array I will return to represent the board to frontend.
+
+    BOARD:
+    0 | 1 | 2 
+    3 | 4 | 5
+    6 | 7 | 8
+
+    I also have to handle the players - we might ask for a name and save it, but here we will just call them Player X and Y.
+    Some examples: 
+        - empty board =                     [0,1,2,3,4,5,6,7,8]
+        - player one moved in position 2 =  [0,1,X,3,4,5,6,7,8]
+        - player two moved in position 4 =  [0,1,X,3,Y,5,6,7,8]
+
+2.  To decide who and if they won, I will build a logic checking all the possibilities:
+    - rows: [ [0, 1, 2], [3, 4, 5], [6, 7, 8] ]
+    - columns: [ [0, 3, 6], [1, 4, 7], [2, 5, 8] ]
+    - diagonals: [ [0, 4, 8], [2, 4, 6] ]
+    Once one of those as all equals symbols, the player won. If the board has no left space, no one wins and the return field will be empty.
+    I will also store the winner in a column of the table, and add a timestamp column to store the end of the game timestamp.
+
+## Step 4: Handle errors in making a move
+
+Requirement: The endpoint that handles moves being played should perform some basic error handling to ensure the move is valid, and that it is the right players turn
+    (ie. a player cannot play two moves in a row, or place a piece on top of another player’s piece)
+
+Note: Formal validation will be done with validated Requests from Laravel. Business logic validation will be in my code.
+
+1. Move must be valid
+   - position must be between 0 and 8
+   - position must be free
+   - player cannot make 2 moves in a row (player X will start by default)
+
+## Step 5: Allow to play somehow
+
+Requirement: Please provide a test case example (such as test cases or a list of cURL commands) of a fully played out game with your solution.
+
+1. Feature test simulating a game via HTTP Requests
+
+2. cURL requests with instructions to play in production or locally
+
+3. CLI command for interactive game
