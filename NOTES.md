@@ -6,6 +6,19 @@ This is a simple API to run a Tic Tac Toe game.
 - To execute the tests, you can run the command `php artisan test`
 - To run migrations, you can run the command `./vendor/bin/sail artisan migrate`
 
+## How to play a game
+
+DB hostname: `https://tic-tac-toe-laravel.vercel.app/` - just replace the hostname in the following cURL commands to play in production.
+
+### cURL commands
+
+- Start a game: `curl -XPOST -H "Content-type: application/json" 'http://localhost/api/new-game'`
+- Make a move: `curl -XPOST -H "Content-type: application/json" -d '{
+  "gameId": 7,
+  "player": "Y",
+  "position": 1
+  }' 'http://localhost/api/move'`
+
 # Exercise Notes
 
 Here I'm tracking the process I'm following and the decisions I'm taking. I did it here to leave the default README file unchanged.

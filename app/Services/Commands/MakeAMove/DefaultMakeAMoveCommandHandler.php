@@ -71,6 +71,12 @@ class DefaultMakeAMoveCommandHandler implements MakeAMoveCommandHandler
     private function validateMove(Game $currentGame, MakeAMoveCommand $command): void
     {
         if (
+            !is_null($currentGame->finished_at)
+        ) {
+            throw new GameFinishedException();
+        }
+
+        if (
             $currentGame->last_move === $command->player
         ) {
             throw new PlayerCantMoveTwiceException();

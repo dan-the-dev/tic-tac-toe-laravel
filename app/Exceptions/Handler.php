@@ -2,6 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Services\Commands\MakeAMove\PlayerCantMoveTwiceException;
+use App\Services\Commands\MakeAMove\PositionAlreadyTakenException;
+use App\Services\Commands\NewGame\GameNotCreatedException;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -27,4 +31,11 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    protected function shouldReturnJson($request, Throwable $e): bool
+    {
+        return parent::shouldReturnJson($request, $e) || $request->is("api/*");
+    }
+
 }
+

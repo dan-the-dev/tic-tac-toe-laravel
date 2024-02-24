@@ -13,6 +13,7 @@ class FakeGameRepository implements GameRepository
     private array $initialStatus;
     private array $finalStatus;
     private ?string $last_move = null;
+    private bool $finished = false;
     private $moves = 0;
     public function __construct(private readonly bool $throwException = false)
     {
@@ -20,24 +21,29 @@ class FakeGameRepository implements GameRepository
         $this->initialStatus = self::INITIAL_STATUS;
     }
 
-    public function setFinalStatus(array $status): void
+    public function setFakeFinalStatus(array $status): void
     {
         $this->finalStatus = $status;
     }
 
-    public function setInitialStatus(array $status): void
+    public function setFakeInitialStatus(array $status): void
     {
         $this->initialStatus = $status;
     }
 
-    public function setLastMove(string $player): void
+    public function setFakeLastMove(string $player): void
     {
         $this->last_move = $player;
     }
 
-    public function setMoves(int $moves): void
+    public function setFakeMoves(int $moves): void
     {
         $this->moves = $moves;
+    }
+
+    public function setFakeAsFinished(): void
+    {
+        $this->finished = true;
     }
 
     public function create(): int
@@ -87,13 +93,18 @@ class FakeGameRepository implements GameRepository
 
     public function get(int $gameId): Game
     {
+        $finished = null;
+        if ($this->finished) {
+            $finished = new DateTimeImmutable();
+        }
+
         return new Game([
             'id' => 1,
             'status' => $this->initialStatus,
             'last_move' => $this->last_move,
             'moves' => $this->moves,
             'winner' => null,
-            'finished_at' => null,
+            'finished_at' => $finished,
         ]);
     }
 }

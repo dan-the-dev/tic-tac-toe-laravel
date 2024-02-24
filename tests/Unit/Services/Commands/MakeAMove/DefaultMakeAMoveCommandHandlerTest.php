@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Commands\MakeAMove;
 
 use App\Services\Commands\MakeAMove\DefaultMakeAMoveCommandHandler;
+use App\Services\Commands\MakeAMove\GameFinishedException;
 use App\Services\Commands\MakeAMove\MakeAMoveCommand;
 use App\Services\Commands\MakeAMove\MakeAMoveResult;
 use App\Services\Commands\MakeAMove\PlayerCantMoveTwiceException;
@@ -15,7 +16,7 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
     public function testItMakeAMoveCorrectly(): void
     {
         $gameRepository = new FakeGameRepository();
-        $gameRepository->setFinalStatus(['X', 1, 2, 3, 4, 5, 6, 7, 8]);
+        $gameRepository->setFakeFinalStatus(['X', 1, 2, 3, 4, 5, 6, 7, 8]);
 
         $handler = new DefaultMakeAMoveCommandHandler(
             $gameRepository
@@ -41,8 +42,8 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
          */
 
         $gameRepository = new FakeGameRepository();
-        $gameRepository->setFinalStatus(['X', 'Y', 'X', 'Y', 'X', 'X', 'Y', 'X', 'Y']);
-        $gameRepository->setMoves(9);
+        $gameRepository->setFakeFinalStatus(['X', 'Y', 'X', 'Y', 'X', 'X', 'Y', 'X', 'Y']);
+        $gameRepository->setFakeMoves(9);
 
         $handler = new DefaultMakeAMoveCommandHandler(
             $gameRepository
@@ -68,8 +69,8 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
          */
 
         $gameRepository = new FakeGameRepository();
-        $gameRepository->setFinalStatus(['X', 1, 'Y', 'Y', 'Y', 5, 'X', 'X', 'X']);
-        $gameRepository->setMoves(7);
+        $gameRepository->setFakeFinalStatus(['X', 1, 'Y', 'Y', 'Y', 5, 'X', 'X', 'X']);
+        $gameRepository->setFakeMoves(7);
 
         $handler = new DefaultMakeAMoveCommandHandler(
             $gameRepository
@@ -95,8 +96,8 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
          */
 
         $gameRepository = new FakeGameRepository();
-        $gameRepository->setFinalStatus(['X', 1, 'Y', 3, 'Y', 'X', 'Y', 'X', 8]);
-        $gameRepository->setMoves(6);
+        $gameRepository->setFakeFinalStatus(['X', 1, 'Y', 3, 'Y', 'X', 'Y', 'X', 8]);
+        $gameRepository->setFakeMoves(6);
 
         $handler = new DefaultMakeAMoveCommandHandler(
             $gameRepository
@@ -122,8 +123,8 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
          */
 
         $gameRepository = new FakeGameRepository();
-        $gameRepository->setFinalStatus(['Y', 'X', 'Y', 3, 'X', 'X', 'Y', 'X', 8]);
-        $gameRepository->setMoves(7);
+        $gameRepository->setFakeFinalStatus(['Y', 'X', 'Y', 3, 'X', 'X', 'Y', 'X', 8]);
+        $gameRepository->setFakeMoves(7);
 
         $handler = new DefaultMakeAMoveCommandHandler(
             $gameRepository
@@ -143,7 +144,7 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
     public function testItThrowsExceptionIfPositionNotFree(): void
     {
         $gameRepository = new FakeGameRepository();
-        $gameRepository->setInitialStatus(['X', 1, 2, 3, 4, 5, 6, 7, 8]);
+        $gameRepository->setFakeInitialStatus(['X', 1, 2, 3, 4, 5, 6, 7, 8]);
 
         $handler = new DefaultMakeAMoveCommandHandler(
             $gameRepository
@@ -158,7 +159,7 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
     public function testItThrowsExceptionIfPlayerMakesTwoMovesInARow(): void
     {
         $gameRepository = new FakeGameRepository();
-        $gameRepository->setLastMove('X');
+        $gameRepository->setFakeLastMove('X');
 
         $handler = new DefaultMakeAMoveCommandHandler(
             $gameRepository
@@ -168,6 +169,21 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
             gameId: 1, player: 'X', position: 0
         );
         $this->expectException(PlayerCantMoveTwiceException::class);
+        $handler->handle($command);
+    }
+    public function testItThrowsExceptionIfGameIsFinished(): void
+    {
+        $gameRepository = new FakeGameRepository();
+        $gameRepository->setFakeAsFinished();
+
+        $handler = new DefaultMakeAMoveCommandHandler(
+            $gameRepository
+        );
+
+        $command = new MakeAMoveCommand(
+            gameId: 1, player: 'X', position: 0
+        );
+        $this->expectException(GameFinishedException::class);
         $handler->handle($command);
     }
 }
