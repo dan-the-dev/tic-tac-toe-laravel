@@ -90,6 +90,8 @@ Requirement: Need an endpoint to call to play a move in the game. The endpoint s
     Once one of those as all equals symbols, the player won. If the board has no left space, no one wins and the return field will be empty.
     I will also store the winner in a column of the table, and add a timestamp column to store the end of the game timestamp.
 
+Here I realized that freemysqlhosting - the hosting for Mysql I was using, is stuck at 5.5 so no JSON columns... I turned that into a string then.
+
 ## Step 4: Handle errors in making a move
 
 Requirement: The endpoint that handles moves being played should perform some basic error handling to ensure the move is valid, and that it is the right players turn

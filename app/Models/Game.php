@@ -30,15 +30,15 @@ class Game extends Model
 
     protected $casts = [
         'id' => 'int',
-        'status' => 'array',
+        'status' => 'string',
         'winner' => 'string',
     ];
 
     protected function status(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => json_decode($value),
-            set: fn ($value) => json_encode($value),
+            get: fn (string $value) => explode('|', $value),
+            set: fn (array $value) => implode('|', $value),
         );
     }
 
