@@ -5,6 +5,8 @@ namespace Tests\Unit\Services\Commands\MakeAMove;
 use App\Services\Commands\MakeAMove\DefaultMakeAMoveCommandHandler;
 use App\Services\Commands\MakeAMove\MakeAMoveCommand;
 use App\Services\Commands\MakeAMove\MakeAMoveResult;
+use App\Services\Commands\MakeAMove\PlayerCantMoveTwiceException;
+use App\Services\Commands\MakeAMove\PositionAlreadyTakenException;
 use PHPUnit\Framework\TestCase;
 use Tests\Doubles\Repositories\GameRepository\FakeGameRepository;
 
@@ -137,5 +139,35 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
             winner: 'X',
             finished: true
         ), $actual);
+    }
+    public function testItThrowsExceptionIfPositionNotFree(): void
+    {
+        $gameRepository = new FakeGameRepository();
+        $gameRepository->setInitialStatus(['X', 1, 2, 3, 4, 5, 6, 7, 8]);
+
+        $handler = new DefaultMakeAMoveCommandHandler(
+            $gameRepository
+        );
+
+        $command = new MakeAMoveCommand(
+            gameId: 1, player: 'Y', position: 0
+        );
+        $this->expectException(PositionAlreadyTakenException::class);
+        $handler->handle($command);
+    }
+    public function testItThrowsExceptionIfPlayerMakesTwoMovesInARow(): void
+    {
+        $gameRepository = new FakeGameRepository();
+        $gameRepository->setLastMove('X');
+
+        $handler = new DefaultMakeAMoveCommandHandler(
+            $gameRepository
+        );
+
+        $command = new MakeAMoveCommand(
+            gameId: 1, player: 'X', position: 0
+        );
+        $this->expectException(PlayerCantMoveTwiceException::class);
+        $handler->handle($command);
     }
 }

@@ -24,6 +24,7 @@ class Game extends Model
         'id',
         'status',
         'moves',
+        'last_move',
         'winner',
         'finished_at'
     ];

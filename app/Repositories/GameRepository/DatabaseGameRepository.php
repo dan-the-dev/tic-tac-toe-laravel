@@ -27,6 +27,7 @@ class DatabaseGameRepository implements GameRepository
         $status[$position] = $player;
         $game->status = $status;
         $game->moves ++;
+        $game->last_move = $player;
         $game->saveOrFail();
 
         return $game;
@@ -49,6 +50,14 @@ class DatabaseGameRepository implements GameRepository
         $game = Game::findOrFail($gameId);
         $game->finished_at = new DateTimeImmutable();
         $game->saveOrFail();
+
+        return $game;
+    }
+
+    public function get(int $gameId): Game
+    {
+        /** @var Game $game */
+        $game = Game::findOrFail($gameId);
 
         return $game;
     }

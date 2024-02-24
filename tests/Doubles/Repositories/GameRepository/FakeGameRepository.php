@@ -9,15 +9,30 @@ use Exception;
 
 class FakeGameRepository implements GameRepository
 {
-    private $status = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    const INITIAL_STATUS = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    private array $initialStatus;
+    private array $finalStatus;
+    private ?string $last_move = null;
     private $moves = 0;
     public function __construct(private readonly bool $throwException = false)
     {
+        $this->finalStatus = self::INITIAL_STATUS;
+        $this->initialStatus = self::INITIAL_STATUS;
     }
 
     public function setFinalStatus(array $status): void
     {
-        $this->status = $status;
+        $this->finalStatus = $status;
+    }
+
+    public function setInitialStatus(array $status): void
+    {
+        $this->initialStatus = $status;
+    }
+
+    public function setLastMove(string $player): void
+    {
+        $this->last_move = $player;
     }
 
     public function setMoves(int $moves): void
@@ -38,7 +53,8 @@ class FakeGameRepository implements GameRepository
     {
         return new Game([
             'id' => 1,
-            'status' => $this->status,
+            'status' => $this->finalStatus,
+            'last_move' => $player,
             'moves' => $this->moves,
             'winner' => null,
             'finished_at' => null,
@@ -49,7 +65,8 @@ class FakeGameRepository implements GameRepository
     {
         return new Game([
             'id' => 1,
-            'status' => $this->status,
+            'status' => $this->finalStatus,
+            'last_move' => $this->last_move,
             'moves' => $this->moves,
             'winner' => $player,
             'finished_at' => new DateTimeImmutable(),
@@ -60,10 +77,23 @@ class FakeGameRepository implements GameRepository
     {
         return new Game([
             'id' => 1,
-            'status' => $this->status,
+            'status' => $this->finalStatus,
+            'last_move' => $this->last_move,
             'moves' => $this->moves,
             'winner' => null,
             'finished_at' => new DateTimeImmutable(),
+        ]);
+    }
+
+    public function get(int $gameId): Game
+    {
+        return new Game([
+            'id' => 1,
+            'status' => $this->initialStatus,
+            'last_move' => $this->last_move,
+            'moves' => $this->moves,
+            'winner' => null,
+            'finished_at' => null,
         ]);
     }
 }

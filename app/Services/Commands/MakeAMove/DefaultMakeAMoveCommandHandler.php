@@ -15,6 +15,21 @@ class DefaultMakeAMoveCommandHandler implements MakeAMoveCommandHandler
 
     public function handle(MakeAMoveCommand $command): MakeAMoveResult
     {
+        $currentGame = $this->gameRepository->get($command->gameId);
+
+        if (
+            $currentGame->last_move === $command->player
+        ) {
+            throw new PlayerCantMoveTwiceException();
+        }
+
+        if (
+            $currentGame->status[$command->position] === 'X' ||
+            $currentGame->status[$command->position] === 'Y'
+        ) {
+            throw new PositionAlreadyTakenException();
+        }
+
         $updatedGame = $this->gameRepository->move(
             gameId: $command->gameId,
             player: $command->player,

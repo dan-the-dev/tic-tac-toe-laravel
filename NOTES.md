@@ -98,10 +98,12 @@ Requirement: The endpoint that handles moves being played should perform some ba
     (ie. a player cannot play two moves in a row, or place a piece on top of another player’s piece)
 
 Note: Formal validation will be done with validated Requests from Laravel. Business logic validation will be in my code.
+I will limit formal validation to the request and then trust that in internal classes - I know is not ideal, ideally I would have created data classes / value objects and validate data more strictly in internal pieces.
+This is just to simplify the exercise.
 
 1. Move must be valid
-   - position must be between 0 and 8
-   - position must be free
+   - position must be between 0 and 8 [v] -> request validation
+   - position must be free [v]
    - player cannot make 2 moves in a row (player X will start by default)
 
 ## Step 5: Allow to play somehow
