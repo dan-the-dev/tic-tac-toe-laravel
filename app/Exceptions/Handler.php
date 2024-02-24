@@ -32,6 +32,15 @@ class Handler extends ExceptionHandler
         });
     }
 
+    public function render($request, Throwable $e)
+    {
+        return response()
+            ->json([
+                'message' => $e->getMessage() === '' ? 'Something went wrong!' : $e->getMessage(),
+                'exception' => get_class($e)
+            ]);
+    }
+
     protected function shouldReturnJson($request, Throwable $e): bool
     {
         return parent::shouldReturnJson($request, $e) || $request->is("api/*");
