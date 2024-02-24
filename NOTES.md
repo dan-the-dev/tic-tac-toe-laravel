@@ -32,3 +32,5 @@ Approach: I will work in TDD outside-in, so I will build this from the outside (
     I will try to make the first steps stricyl respecting TDD committing at every baby step of TDD so that is visibile in GIT LOG that I did TDD.
 
 1. Create an invokable NewGameController.
+   - Controller has no Request object because it has no input params.
+   - 
