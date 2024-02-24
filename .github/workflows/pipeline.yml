@@ -37,6 +37,11 @@ jobs:
           cp .env.ci .env
           php artisan key:generate
 
+      - name: Create Database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+
       - name: Run migrations
         run: |
           php artisan migrate
