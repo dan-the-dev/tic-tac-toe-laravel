@@ -45,6 +45,7 @@ Note: I will use this first step as showcase for some of the practices and metho
 2. Implement the concrete of `NewGameCommandHandler` that handle the real behavior.
    - Here I can try a more strict approach to TDD, GIT log should make it visible enough
    - This strict approach will lead me to implement everything in the service, and then I will extract new components
+   - I decided to run migration from local env for simplicity because I didn't want to lose too much time in finding a tricky way to do it since Vercel doesn't allow for php commands execution and having it deployed is a plus
    - To make a concrete implementation, I need:
      - A migration to create the `games` table - the table only needs an ID basically, atm; I will also add created_at and updated_at as best practice - I will face the problem 1 step at a time so I don't care about next requirements for now
      - The Model for the new table - I will create it together with migration with the command `php artisan make:model Game --migration`
