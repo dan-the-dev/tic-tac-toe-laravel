@@ -24,3 +24,11 @@ Here I'm tracking the process I'm following and the decisions I'm taking. I did 
        - set the build folder on Vercel to `api`
 3. I used Vercel default auto deploy functionality, but I also want to show something more about my habits and skills here; that's why I created a GitHub Action configured to build the app, static analysis, and tests; in a real-world project, I would have invested time in understanding how to trigger the release on Vercel from here (I tried, but manual deploy from Actions to Vercel with PHP had some issues and I didn't want too lose to much time on that since it's not the focus). Of course, this is not ideal because build & test is happening in parallel to deploy - they should be one after another so that I only deploy if tests and other automated checks are fine. In that case, I typically like to have a staging release triggered at every push on master, while Prod release happens after a tag. I will probably use Github actions later for migrations for simplicity.  
 
+## Step 2: Create the first API
+
+Requirement: Need an endpoint to call to start a new game. The response should give me some kind of ID for me to use in other endpoints calls to tell the backend what game I am referring to.
+
+Approach: I will work in TDD outside-in, so I will build this from the outside (Controller) to the inside (-> Services -> DB). 
+    I will try to make the first steps stricyl respecting TDD committing at every baby step of TDD so that is visibile in GIT LOG that I did TDD.
+
+1. Create an invokable NewGameController.
