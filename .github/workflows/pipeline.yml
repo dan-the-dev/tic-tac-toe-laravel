@@ -28,11 +28,16 @@ jobs:
           cp .env.ci .env
           php artisan key:generate
 
-      - name: Run migrations
+      - name: Create Database
         run: |
           mkdir -p database
           touch database/database.sqlite
-          pwd
+
+      - name: Run migrations
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: /home/runner/work/tic-tac-toe-laravel/tic-tac-toe-laravel/database/database.sqlite
+        run: |
           php artisan migrate
 
       - name: Run tests
