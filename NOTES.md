@@ -4,6 +4,7 @@ This is a simple API to run a Tic Tac Toe game.
 
 - To run the application, you can run the command: `./vendor/bin/sail up`
 - To execute the tests, you can run the command `php artisan test`
+- To run migrations, you can run the command `./vendor/bin/sail artisan migrate`
 
 # Exercise Notes
 
@@ -28,8 +29,10 @@ Here I'm tracking the process I'm following and the decisions I'm taking. I did 
 
 Requirement: Need an endpoint to call to start a new game. The response should give me some kind of ID for me to use in other endpoints calls to tell the backend what game I am referring to.
 
-Approach: I will work in TDD outside-in, so I will build this from the outside (Controller) to the inside (-> Services -> DB). 
-    I will try to make the first steps stricyl respecting TDD committing at every baby step of TDD so that is visibile in GIT LOG that I did TDD.
+Approach: I will work in TDD outside-in, so I will build this from the outside (Controller) to the inside (-> Services -> DB). This will not be visible, because with this approach the architecture would be iterative and therefore very simple for such simple exercise.
+        Since I want also to show some other skills, such as CQRS approach, a bit of hexagonal arch, etc - I will not focus on strict TDD, but from GIT log it should be somehow a bit visible.
+
+Note: I will use this first step as showcase for some of the practices and metholodiges I use such as TDD, manual fakes and mocks, CQRS, etc - following steps I will be a bit faster following the decisions I already took in this step.
 
 1. Create an invokable NewGameController.
    - Controller has no Request object because it has no input params.
@@ -38,3 +41,14 @@ Approach: I will work in TDD outside-in, so I will build this from the outside (
    - I made a refactor of the controller immediately because strict TDD with triangulation etc would have costed a lot just to force a simple value on a simple behavior. The controller just have to validate request, send request to service, and handle response imho - and in this case we don't have a request and response is very small, so it wasn't worth it.
    - Since the Response here is very easy, I didn't create an adapter class for the response creation, but I created a dedicated method to isolate the responsibility anyway.
    - Important notes about tests: I typically favor manual Fakes and Spies over mocking library because this makes tests not coupled with the implementation (calling a specific method of a collaborator is an implementation detail) and therefore easier to maintain and doesn't change if I change the way those two classes communicate (the fake will change, but the fake is not specific of a single test - see [here](https://antodippo.com/how-can-i-trust-my-testsuite/#/25) for a reference).
+
+2. Implement the concrete of `NewGameCommandHandler` that handle the real behavior.
+   - Here I can try a more strict approach to TDD, GIT log should make it visible enough
+   - This strict approach will lead me to implement everything in the service, and then I will extract new components
+   - To make a concrete implementation, I need:
+     - A migration to create the `games` table - the table only needs an ID basically, atm; I will also add created_at and updated_at as best practice - I will face the problem 1 step at a time so I don't care about next requirements for now
+     - The Model for the new table - I will create it together with migration with the command `php artisan make:model Game --migration`
+     - The business logic of creating a new record in the table to create a new game, and return the ID
+     - Test list:
+       - create new record and return ID
+       - throw a custom Exception if something goes wrong
