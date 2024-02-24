@@ -52,4 +52,7 @@ Note: I will use this first step as showcase for some of the practices and metho
      - The business logic of creating a new record in the table to create a new game, and return the ID
      - Test list:
        - create new record and return ID
-       - throw a custom Exception if something goes wrong
+       - throw a custom Exception if something goes wrong --> to do this I need to first extract the DB logic, for example in a Repository class, to then mock it and force an exception coming from there
+   - I created GameRepository to contain all the logic about working with the Game persistance, in our case it's DB persistance layer
+   - Usually, I would follow Object Calisthenics rules and avoid sharing primitives variables, for example ID shouldn't be an int but a Data Class - here I decided to favor simplicity and stick with the int
+   - I used Parallel change here: I first created GameRepository and its Database implementation to encapsulate the DB writing logic (see git log for evidence) and then I replaced it in the service - this way the refactoring never broke the existing code

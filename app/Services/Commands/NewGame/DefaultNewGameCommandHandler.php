@@ -4,7 +4,7 @@ namespace App\Services\Commands\NewGame;
 
 use App\Models\Game;
 
-class NewGameCommandHandlerDefault implements NewGameCommandHandler
+class DefaultNewGameCommandHandler implements NewGameCommandHandler
 {
 
     public function handle(): NewGameResult
