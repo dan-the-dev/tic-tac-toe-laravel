@@ -144,3 +144,8 @@ Requirement: Please provide a test case example (such as test cases or a list of
 - Some casting is handled manually to avoid DB connection to trigger from Laravel and still be able to write a unit test
 - At some point I decided to take some more simplifications to keep the exercise time-boxed to 4-6 hours
 - I didn't care about performance at all - usually performance are a problem to solve only when it really happens, in this case it didn't even when finished
+
+About the command: I've not created much command line tools in my life, it was funny, but the code for printing is not ideal :D but I decided it was enough to make it work, it was just to give a simple way to test the implementation works.
+Thanks to my approach, following a Clean Arch, the Command is a replacement of Controller: Command is for CLI, Controller is for HTTP requests. The services and repositories are the same.
+
+Of course, refactoring could be infinite - I decided to stop at some point.
