@@ -56,38 +56,34 @@ class DefaultMakeAMoveCommandHandler implements MakeAMoveCommandHandler
     {
         $winningSets = [Game::ROWS, Game::COLUMNS, Game::DIAGONALS];
         $setWinner = null;
+
         foreach ($winningSets as $winningSet) {
             foreach ($winningSet as $set) {
-                if (
-                    is_string($updatedGame->status[$set[0]]) &&
-                    $updatedGame->status[$set[0]] === $updatedGame->status[$set[1]] && $updatedGame->status[$set[0]] === $updatedGame->status[$set[2]]
-                ) {
+                $wholeSetHasSameValues = $updatedGame->status[$set[0]] === $updatedGame->status[$set[1]] && $updatedGame->status[$set[0]] === $updatedGame->status[$set[2]];
+                if ($wholeSetHasSameValues) {
                     $setWinner = $set;
                     break;
                 }
             }
         }
+
         return $setWinner;
     }
 
     private function validateMove(Game $currentGame, MakeAMoveCommand $command): void
     {
-        if (
-            !is_null($currentGame->finished_at)
-        ) {
+        $gameFinished = !is_null($currentGame->finished_at);
+        if ($gameFinished) {
             throw new GameFinishedException();
         }
 
-        if (
-            $currentGame->last_move === $command->player
-        ) {
+        $samePlayerMovedLastTime = $currentGame->last_move === $command->player;
+        if ($samePlayerMovedLastTime) {
             throw new PlayerCantMoveTwiceException();
         }
 
-        if (
-            $currentGame->status[$command->position] === 'X' ||
-            $currentGame->status[$command->position] === 'Y'
-        ) {
+        $positionAlreadyTaken = $currentGame->status[$command->position] === 'X' || $currentGame->status[$command->position] === 'Y';
+        if ($positionAlreadyTaken) {
             throw new PositionAlreadyTakenException($command->position);
         }
     }

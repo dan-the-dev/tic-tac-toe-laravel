@@ -164,6 +164,7 @@ class TicTacToe extends Command
         $this->happyAnnouncement('--------------------------------');
 
         $this->header('| !!! Final board !!! |');
+        $this->header('');
         $this->paragraph(" {$this->printWinningPosition($makeAMoveResult->status[0], 0, $makeAMoveResult->setWinner)} | {$this->printWinningPosition($makeAMoveResult->status[1], 1, $makeAMoveResult->setWinner)} | {$this->printWinningPosition($makeAMoveResult->status[2], 2, $makeAMoveResult->setWinner)} ");
         $this->paragraph('-----------');
         $this->paragraph(" {$this->printWinningPosition($makeAMoveResult->status[3], 3, $makeAMoveResult->setWinner)} | {$this->printWinningPosition($makeAMoveResult->status[4], 4, $makeAMoveResult->setWinner)} | {$this->printWinningPosition($makeAMoveResult->status[5], 5, $makeAMoveResult->setWinner)} ");

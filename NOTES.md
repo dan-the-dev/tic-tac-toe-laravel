@@ -147,4 +147,8 @@ About the command: I've not created much command line tools in my life, it was f
 Thanks to my approach, following a Clean Arch, the Command is a replacement of Controller: Command is for CLI, Controller is for HTTP requests. The services and repositories are the same.
 I tried at least to refactor to split it in small methods, assign variables to give names to logic, etc.
 
+Best part imho: Controller <-> Services with Command pattern looks nice.
+Worst part imho: Services/Commands/MakeAMove/DefaultMakeAMoveCommandHandler::calculateSetWinner - I don't like very much how I'm calculating the winner. It works, but it's not nice. 
+    foreach in foreach is not nice, even if it is a tradeoff to avoid duplication of logic to check rows, columns and diagonals. I would have loved to make it more functional, but I had to stop at some point. 
+
 Of course, refactoring could be infinite - I decided to stop at some point.
