@@ -128,11 +128,9 @@ Thanks to tests, I refactored a bit after that, before building the tests exampl
 
 Requirement: Please provide a test case example (such as test cases or a list of cURL commands) of a fully played out game with your solution.
 
-1. Feature test simulating a game via HTTP Requests -> Feature/GameSimulationTest.php, run `./vendor/bin/sail artisan test --filter GameSimulationTest` 
-
+1. Feature test simulating a game via HTTP Requests -> Feature/GameSimulationTest.php, run `./vendor/bin/sail artisan test --filter GameSimulationTest`
 2. cURL requests with instructions to play in production or locally -> see beginning of this file for the commands to start a new game and make a move
-
-3. CLI command for interactive game -> run `./vendor/bin/sail artisan tictactoe`
+3. CLI command for interactive game -> run `./vendor/bin/sail up -d` then `./vendor/bin/sail artisan tictactoe` 
 
 ## Final notes
 
@@ -147,5 +145,6 @@ Requirement: Please provide a test case example (such as test cases or a list of
 
 About the command: I've not created much command line tools in my life, it was funny, but the code for printing is not ideal :D but I decided it was enough to make it work, it was just to give a simple way to test the implementation works.
 Thanks to my approach, following a Clean Arch, the Command is a replacement of Controller: Command is for CLI, Controller is for HTTP requests. The services and repositories are the same.
+I tried at least to refactor to split it in small methods, assign variables to give names to logic, etc.
 
 Of course, refactoring could be infinite - I decided to stop at some point.

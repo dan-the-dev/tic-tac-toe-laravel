@@ -88,7 +88,7 @@ class DefaultMakeAMoveCommandHandler implements MakeAMoveCommandHandler
             $currentGame->status[$command->position] === 'X' ||
             $currentGame->status[$command->position] === 'Y'
         ) {
-            throw new PositionAlreadyTakenException();
+            throw new PositionAlreadyTakenException($command->position);
         }
     }
 }
