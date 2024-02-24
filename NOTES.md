@@ -2,13 +2,19 @@
 
 This is a simple API to run a Tic Tac Toe game.
 
-- To run the application, you can run the command: `./vendor/bin/sail up`
-- To execute the tests, you can run the command `php artisan test`
+Prerequisites:
+- Laravel Sail, that requires Docker and Docker compose itself - see installation instructions [here](https://laravel.com/docs/10.x/installation#docker-installation-using-sail).
+
+- To run the application, you can run the command: `./vendor/bin/sail up -d` and then visit `http://localhost/`
 - To run migrations, you can run the command `./vendor/bin/sail artisan migrate`
+- To execute the tests, you can run the command `php artisan test`
 
 ## How to play a game
 
-DB hostname: `https://tic-tac-toe-laravel.vercel.app/` - just replace the hostname in the following cURL commands to play in production.
+Local hostname: `http://localhost`
+Production hostname: `https://tic-tac-toe-laravel.vercel.app`
+
+Just replace the hostname in the following cURL commands to play in production.
 
 ### cURL commands
 
@@ -18,6 +24,17 @@ DB hostname: `https://tic-tac-toe-laravel.vercel.app/` - just replace the hostna
   "player": "X",
   "position": 0
   }' 'http://localhost/api/move'`
+
+Simplest way to make a full game:
+
+1. Start a game: `curl -XPOST -H "Content-type: application/json" 'http://localhost/api/new-game'`
+2. Move X in 0: `curl -XPOST -H "Content-type: application/json" -d '{"gameId": 1, "player": "X", "position": 0}' 'http://localhost/api/move'`
+3. Move X in 1: `curl -XPOST -H "Content-type: application/json" -d '{"gameId": 2, "player": "Y", "position": 1}' 'http://localhost/api/move'`
+4. Move X in 2: `curl -XPOST -H "Content-type: application/json" -d '{"gameId": 3, "player": "X", "position": 2}' 'http://localhost/api/move'`
+5. Move X in 3: `curl -XPOST -H "Content-type: application/json" -d '{"gameId": 4, "player": "Y", "position": 3}' 'http://localhost/api/move'`
+6. Move X in 4: `curl -XPOST -H "Content-type: application/json" -d '{"gameId": 5, "player": "X", "position": 4}' 'http://localhost/api/move'`
+7. Move X in 5: `curl -XPOST -H "Content-type: application/json" -d '{"gameId": 6, "player": "Y", "position": 5}' 'http://localhost/api/move'`
+8. Move X in 6: `curl -XPOST -H "Content-type: application/json" -d '{"gameId": 7, "player": "X", "position": 6}' 'http://localhost/api/move'`
 
 # Exercise Notes
 
