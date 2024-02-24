@@ -23,6 +23,10 @@ class NewGameController extends Controller
         );
     }
 
+    /**
+     * @param NewGameResult $result
+     * @return array<string, int>
+     */
     private function buildResponse(NewGameResult $result): array
     {
         return [

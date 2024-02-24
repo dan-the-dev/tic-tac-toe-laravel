@@ -4,6 +4,7 @@ namespace App\Services\Commands\NewGame;
 
 use App\Models\Game;
 use App\Repositories\GameRepository\GameRepository;
+use Throwable;
 
 class DefaultNewGameCommandHandler implements NewGameCommandHandler
 {
@@ -15,8 +16,11 @@ class DefaultNewGameCommandHandler implements NewGameCommandHandler
 
     public function handle(): NewGameResult
     {
-        $gameId = $this->gameRepository->create();
-
-        return new NewGameResult($gameId);
+        try {
+            $gameId = $this->gameRepository->create();
+            return new NewGameResult($gameId);
+        } catch (Throwable $exception) {
+            throw new GameNotCreatedException();
+        }
     }
 }
