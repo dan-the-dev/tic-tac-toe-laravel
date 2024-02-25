@@ -105,6 +105,12 @@ class TicTacToe extends Command
         return "<fg=cyan>$positionOffsetForPrint</>";
     }
 
+    /**
+     * @param string $text
+     * @param int $position
+     * @param array<int> $winningSet
+     * @return string
+     */
     private function printWinningPosition(string $text, int $position, array $winningSet): string
     {
         if (in_array($position, $winningSet)) {
@@ -124,11 +130,11 @@ class TicTacToe extends Command
     {
         $this->header("New game (#{$newGame->id}):");
         $this->paragraph('');
-        $this->paragraph(" {$this->printPosition(0)} | {$this->printPosition(1)} | {$this->printPosition(2)} ");
+        $this->paragraph(" {$this->printPosition('0')} | {$this->printPosition('1')} | {$this->printPosition('2')} ");
         $this->paragraph('-----------');
-        $this->paragraph(" {$this->printPosition(3)} | {$this->printPosition(4)} | {$this->printPosition(5)} ");
+        $this->paragraph(" {$this->printPosition('3')} | {$this->printPosition('4')} | {$this->printPosition('5')} ");
         $this->paragraph('-----------');
-        $this->paragraph(" {$this->printPosition(6)} | {$this->printPosition(7)} | {$this->printPosition(8)} ");
+        $this->paragraph(" {$this->printPosition('6')} | {$this->printPosition('7')} | {$this->printPosition('8')} ");
     }
 
     private function makeNextMove(string $player, NewGameResult $newGame): MakeAMoveResult

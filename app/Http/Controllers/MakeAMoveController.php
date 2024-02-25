@@ -35,7 +35,7 @@ class MakeAMoveController extends Controller
 
     /**
      * @param MakeAMoveResult $result
-     * @return array<string, int>
+     * @return array<string, mixed>
      */
     private function buildResponse(MakeAMoveResult $result): array
     {

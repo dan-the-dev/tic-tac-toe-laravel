@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $id
+ * @property array<int, int|string> $status
+ * @property int $moves
+ * @property ?string $last_move
+ * @property ?string $winner
+ * @property ?DateTimeImmutable $finished_at
+ */
 class Game extends Model
 {
     use HasFactory;
