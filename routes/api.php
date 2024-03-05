@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GetGameController;
 use App\Http\Controllers\MakeAMoveController;
 use App\Http\Controllers\NewGameController;
 use Illuminate\Http\Request;
@@ -20,5 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/get-game', GetGameController::class);
 Route::post('/new-game', NewGameController::class);
 Route::post('/move', MakeAMoveController::class);

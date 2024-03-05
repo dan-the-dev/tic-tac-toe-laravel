@@ -3,6 +3,7 @@
 namespace App\Services\Commands\MakeAMove;
 
 use App\Models\Game;
+use App\PlayerTips;
 use App\Repositories\GameRepository\GameRepository;
 
 class DefaultMakeAMoveCommandHandler implements MakeAMoveCommandHandler
@@ -36,19 +37,29 @@ class DefaultMakeAMoveCommandHandler implements MakeAMoveCommandHandler
         if ($someoneWon) {
             $winner = $updatedGame->status[$setWinner[0]];
             $updatedGame = $this->gameRepository->setWinner(gameId: $updatedGame->id, player: $winner);
-            return $this->createMoveResult($updatedGame, $setWinner);
+            return $this->createMoveResult($updatedGame, $setWinner, []);
         }
 
-        return $this->createMoveResult($updatedGame);
+        $potentialWinner = $this->calculatePotentialWinner($updatedGame, $command->player);
+        return $this->createMoveResult($updatedGame, null, $potentialWinner);
     }
 
-    private function createMoveResult(Game $updatedGame, array $setWinner = null): MakeAMoveResult
+    private function createMoveResult(Game $updatedGame, array $setWinner = null, array $potentialWinner = []): MakeAMoveResult
     {
+        $tip = PlayerTips::NO_TIP;
+        if (count($potentialWinner) >= 1) {
+            $tip = PlayerTips::WARNING;
+            if (count($potentialWinner) >= 2) {
+                $tip = PlayerTips::MATCH_CLOSED;
+            }
+        }
+
         return new MakeAMoveResult(
             status: $updatedGame->status,
             winner: $updatedGame->winner,
             finished: !is_null($updatedGame->finished_at),
-            setWinner: $setWinner
+            setWinner: $setWinner,
+            tip: $tip
         );
     }
 
@@ -68,6 +79,27 @@ class DefaultMakeAMoveCommandHandler implements MakeAMoveCommandHandler
         }
 
         return $setWinner;
+    }
+
+    private function calculatePotentialWinner(Game $updatedGame, string $player): null|array
+    {
+        $winningSets = [Game::ROWS, Game::COLUMNS, Game::DIAGONALS];
+        $possibleWinningSets = [];
+
+        foreach ($winningSets as $winningSet) {
+            foreach ($winningSet as $set) {
+
+                $isPossibleWinningSet = ($updatedGame->status[$set[0]] === $player && $updatedGame->status[$set[0]] === $updatedGame->status[$set[1]] && is_numeric($updatedGame->status[$set[2]]))
+                    || ($updatedGame->status[$set[0]] === $player && $updatedGame->status[$set[0]] === $updatedGame->status[$set[2]] && is_numeric($updatedGame->status[$set[1]]))
+                    || ($updatedGame->status[$set[1]] === $player && $updatedGame->status[$set[1]] === $updatedGame->status[$set[2]] && is_numeric($updatedGame->status[$set[0]]));
+
+                if ($isPossibleWinningSet) {
+                    $possibleWinningSets[] = $set;
+                }
+            }
+        }
+
+        return $possibleWinningSets;
     }
 
     private function validateMove(Game $currentGame, MakeAMoveCommand $command): void

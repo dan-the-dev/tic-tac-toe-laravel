@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\Commands\MakeAMove;
 
+use App\PlayerTips;
 use App\Services\Commands\MakeAMove\DefaultMakeAMoveCommandHandler;
 use App\Services\Commands\MakeAMove\GameFinishedException;
 use App\Services\Commands\MakeAMove\MakeAMoveCommand;
@@ -188,5 +189,38 @@ class DefaultMakeAMoveCommandHandlerTest extends TestCase
         );
         $this->expectException(GameFinishedException::class);
         $handler->handle($command);
+    }
+    public function testXXX(): void
+    {
+        /**
+         * X |   | Y      X |   | Y
+         * Y |   |    ->  Y |   |    -> X can win in 6,7,8
+         * X |   |        X |   | X
+         */
+
+        /**
+         * X | Y | X
+         * Y |   | Y
+         * X | Y | X
+         */
+        $gameRepository = new FakeGameRepository();
+        $gameRepository->setFakeInitialStatus(['X', 1, 'Y', 'Y', 4, 5, 'X', 7, 8]);
+        $gameRepository->setFakeFinalStatus(['X', 1, 'Y', 'Y', 4, 5, 'X', 7, 'X']);
+        $gameRepository->setFakeMoves(8);
+
+        $handler = new DefaultMakeAMoveCommandHandler(
+            $gameRepository
+        );
+
+        $command = new MakeAMoveCommand(
+            gameId: 1, player: 'X', position: 7
+        );
+        $actual = $handler->handle($command);
+
+        $this->assertEquals(new MakeAMoveResult(
+            status: ['X', 1, 'Y', 'Y', 4, 5, 'X', 7, 'X'],
+            finished: false,
+            tip: PlayerTips::MATCH_CLOSED
+        ), $actual);
     }
 }
